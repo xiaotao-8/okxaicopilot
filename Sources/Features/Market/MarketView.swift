@@ -179,13 +179,13 @@ struct MarketDetailView: View {
 
     private func startBookWS() {
         let socket = OKXWebSocket(isPrivate: false)
-        socket.onEvent = { [weak self] event in
+        socket.onEvent = { event in
             guard let arg = event["arg"] as? [String: Any],
                   let channel = arg["channel"] as? String, channel == "books",
                   let data = event["data"] as? [[String: Any]] else { return }
             let newBook = OrderBook(data: data)
             Task { @MainActor in
-                self?.book = newBook
+                self.book = newBook
             }
         }
         socket.connect()
