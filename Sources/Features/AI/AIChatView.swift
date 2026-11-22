@@ -66,7 +66,11 @@ struct AIChatView: View {
                 }
                 .onChange(of: bubbles.count) { _ in
                     withAnimation {
-                        proxy.scrollTo(bubbles.last?.id ?? "pending", anchor: .bottom)
+                        if let lastId = bubbles.last?.id {
+                            proxy.scrollTo(lastId, anchor: .bottom)
+                        } else {
+                            proxy.scrollTo("pending", anchor: .bottom)
+                        }
                     }
                 }
                 .onChange(of: pending) { _ in
