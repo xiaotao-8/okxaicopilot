@@ -4,6 +4,10 @@
 <dict>
 	<key>CFBundleName</key>
 	<string>OKXAICopilot</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleDisplayName</key>
 	<string>欧易AI跟单</string>
 	<key>CFBundleShortVersionString</key>

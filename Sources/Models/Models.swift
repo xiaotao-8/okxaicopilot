@@ -94,8 +94,8 @@ struct OrderBook {
 
     init(data: [[String: Any]]) {
         guard let first = data.first else { return }
-        bids = first.arr("bids").map(BookLevel.init)
-        asks = first.arr("asks").map(BookLevel.init)
+        bids = (first["bids"] as? [[Any]] ?? []).map(BookLevel.init)
+        asks = (first["asks"] as? [[Any]] ?? []).map(BookLevel.init)
         ts = first.d("ts") / 1000
     }
 

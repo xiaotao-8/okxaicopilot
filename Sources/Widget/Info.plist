@@ -4,6 +4,10 @@
 <dict>
 	<key>CFBundleName</key>
 	<string>OKXWidgetExtension</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleDisplayName</key>
 	<string>欧易行情</string>
 	<key>CFBundleShortVersionString</key>

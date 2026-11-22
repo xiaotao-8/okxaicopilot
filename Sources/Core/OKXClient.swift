@@ -36,7 +36,7 @@ final class OKXClient {
         _ method: String,
         path: String,
         query: [String: String] = [:],
-        body: [String: Any]? = nil,
+        body: Any? = nil,
         requiresAuth: Bool = true
     ) async throws -> [[String: Any]] {
         var components = URLComponents(string: config.baseURL + path)!
@@ -55,7 +55,7 @@ final class OKXClient {
         if method == "POST" { urlRequest.httpBody = bodyString.data(using: .utf8) }
 
         // 请求路径需带原始 query 用于签名
-        let signedPath = items.isEmpty ? path : path + "?" + components.percentEncodedQuery
+        let signedPath = items.isEmpty ? path : path + "?" + (components.percentEncodedQuery ?? "")
 
         if requiresAuth {
             guard config.isConfigured else { throw OKXError.notConfigured }
@@ -107,7 +107,7 @@ final class OKXClient {
         let bodyString = body.flatMap { try? JSONSerialization.data(withJSONObject: $0) }
             .flatMap { String(data: $0, encoding: .utf8) } ?? ""
         if method == "POST" { urlRequest.httpBody = bodyString.data(using: .utf8) }
-        let signedPath = items.isEmpty ? path : path + "?" + components.percentEncodedQuery
+        let signedPath = items.isEmpty ? path : path + "?" + (components.percentEncodedQuery ?? "")
 
         if requiresAuth {
             guard config.isConfigured else { throw OKXError.notConfigured }
@@ -155,10 +155,11 @@ final class OKXClient {
 
     /// K线（bar 例："1m","5m","15m","1H","4H","1D"）
     func candles(instId: String, bar: String = "15m", limit: Int = 100) async throws -> [Candle] {
-        let list = try await request("GET", path: "/api/v5/market/candles",
-                                     query: ["instId": instId, "bar": bar, "limit": String(limit)],
-                                     requiresAuth: false)
-        return list.compactMap { row in (row as [Any]).count >= 5 ? Candle(row) : nil }
+        let obj = try await requestRaw("GET", path: "/api/v5/market/candles",
+                                       query: ["instId": instId, "bar": bar, "limit": String(limit)],
+                                       requiresAuth: false)
+        let list = (obj["data"] as? [[Any]]) ?? []
+        return list.compactMap { row in row.count >= 5 ? Candle(row) : nil }
     }
 
     // MARK: - 账户（私有）
