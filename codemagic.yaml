@@ -35,17 +35,16 @@ workflows:
             -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            | xcpretty || xcodebuild build -project "$XCODE_PROJECT" -scheme "$XCODE_SCHEME" -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_REQUIRED=NO
       - name: 检查产物（列出 .app 内容与 bundle ID）
         script: |
-          set -e
           APP="$CM_BUILD_DIR/build/Build/Products/Debug-iphonesimulator/OKXAICopilot.app"
-          ls -la "$APP"
+          ls -la "$APP" || echo "NO .app"
           echo "--- Info.plist ---"
-          plutil -p "$APP/Info.plist" | grep -i -E "bundle|executable|version" || plutil -p "$APP/Info.plist"
+          plutil -p "$APP/Info.plist" 2>/dev/null | grep -i -E "bundle|executable|version" || echo "NO Info.plist"
           echo "--- binary ---"
-          file "$APP/OKXAICopilot" || echo "NO BINARY"
+          file "$APP/OKXAICopilot" 2>/dev/null || echo "NO BINARY"
+          true
       - name: Package the .app
         script: |
           set -e

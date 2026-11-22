@@ -32,6 +32,9 @@ struct Ticker: Identifiable, Equatable {
 
     var id: String { instId }
 
+    /// 24h 涨跌幅文本，如 +2.35%
+    var changeText: String { changePct.changeText }
+
     init(_ dict: [String: Any]) {
         instId = dict.s("instId")
         last = dict.d("last")
