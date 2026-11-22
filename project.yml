@@ -38,6 +38,9 @@ targets:
     type: app-extension
     platform: iOS
     bundleId: com.okxai.OKXAICopilot.OKXWidgetExtension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.okxai.OKXAICopilot.OKXWidgetExtension
     sources:
       - path: Sources/Widget
       - path: Sources/Models
